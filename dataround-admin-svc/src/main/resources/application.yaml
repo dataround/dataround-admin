@@ -7,9 +7,13 @@ spring:
   application:
     name: dataround-admin
 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/dataround_admin?currentSchema=public
+    url: jdbc:postgresql://10.8.0.1:5432/dataround_admin?currentSchema=public
     username: postgres
     password: "dataround.io"
   sql:
@@ -17,6 +21,7 @@ spring:
       data-locations: classpath:postgresql-schema.sql
       # mode: always - execute script on every startup
       mode: always
+      encoding: UTF-8
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml

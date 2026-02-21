@@ -37,3 +37,20 @@ export const saveOrUpdateProject = (data: any) => {
 export const updateSelected = (projectId: string) => {
   return http.post(baseAPI + "/project/selected/" + projectId);
 };
+
+export const getProjectMembers = (projectId?: string) => {
+  let reqParams = projectId ? "?projectId=" + projectId : "";
+  return http.get(baseAPI + "/project/member/list" + reqParams);
+};
+
+export const saveProjectMember = (data: any) => {
+  return http.post(baseAPI + "/project/member/save", data);
+};
+
+export const deleteProjectMember = (id: string) => {
+  return http.delete(baseAPI + "/project/member/" + id);
+};
+
+export const updatePasswd = (data: { oldPasswd: string; newPasswd: string }) => {
+  return http.post(baseAPI + "/user/updatePasswd", data);
+};

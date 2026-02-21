@@ -6,6 +6,7 @@
 
 package io.dataround.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.AES;
 import com.google.code.kaptcha.Producer;
 import io.dataround.admin.common.CookieUtils;
@@ -14,6 +15,7 @@ import io.dataround.admin.common.Result;
 import io.dataround.admin.common.UserInfo;
 import io.dataround.admin.common.controller.BaseController;
 import io.dataround.admin.common.utils.RequestUtils;
+import io.dataround.admin.entity.User;
 import io.dataround.admin.service.UserService;
 import io.dataround.admin.utils.MessageUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +41,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,6 +107,12 @@ public class LoginController extends BaseController {
                 CookieUtils.addUidCookie(JwtUtil.genToken(loginUser), request, response);
                 // setting current project, used for scheduler iframe request only
                 CookieUtils.addProjectCookie(loginUser.getProjectId() + "%2C" + loginUser.getProjectName(), request, response);
+                // update user login info
+                LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
+                updateWrapper.eq(User::getId, loginUser.getUserId());
+                updateWrapper.set(User::getLastLoginTime, new Date());
+                updateWrapper.set(User::getLastLoginIp, loginUser.getUserIp());
+                userService.update(updateWrapper);
                 return Result.success(map);
             }
         }

@@ -21,10 +21,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public class BaseController {
 
-    public UserInfo getCurrentUser(HttpServletRequest request) {
-        return (UserInfo) request.getAttribute(Constants.CURRENT_USER);
-    }
-
     public UserInfo getCurrentUser() {
         return (UserInfo) getRequest().getAttribute(Constants.CURRENT_USER);
     }

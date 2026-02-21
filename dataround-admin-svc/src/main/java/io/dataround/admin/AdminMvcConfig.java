@@ -39,6 +39,9 @@ public class AdminMvcConfig {
     private String loginEscape;
     @Autowired
     private AuthInterceptor authInterceptor;
+    @Autowired
+    @org.springframework.context.annotation.Lazy
+    private PermissionInterceptor permissionInterceptor;
 
     @Bean
     public WebMvcConfigurer interceptorConfigurer() {
@@ -52,6 +55,10 @@ public class AdminMvcConfig {
                 registry.addInterceptor(authInterceptor)
                         .addPathPatterns("/**") // intercept all request
                         .excludePathPatterns(escapePatterns); // exclude path that do not require login
+                // Permission interceptor (runs after auth interceptor)
+                registry.addInterceptor(permissionInterceptor)
+                        .addPathPatterns("/api/**") // only intercept API requests
+                        .excludePathPatterns(escapePatterns);
             }
         };
     }

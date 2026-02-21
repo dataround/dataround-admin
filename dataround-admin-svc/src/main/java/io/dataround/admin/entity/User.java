@@ -9,8 +9,7 @@ package io.dataround.admin.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,15 +25,30 @@ import java.util.Date;
 public class User {
 
     @TableId(type = IdType.AUTO)
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private String name;
     private String email;
     private String cellphone;
     private String passwd;
-    private Boolean disabled;
-    @JsonSerialize(using = ToStringSerializer.class)
+    // Profile picture URL
+    private String avatar;
+    private String gender;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date birthday;
+    // Department name
+    private String department;
+    // Job position
+    private String position;
+    // Address
+    private String address;
+    private String wechat;
+    // Status: 1-Normal, 2-Disabled, 3-Locked
+    private Integer status;
+    private String remark;
+    private String lastLoginIp;
+    private String lastLoginTime;
     private Long creatorId;
+    private Long updaterId;
     private Date createTime;
     private Date updateTime;
 }

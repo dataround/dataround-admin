@@ -13,6 +13,8 @@ import io.dataround.admin.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Resource service impl
  * 
@@ -24,4 +26,13 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @Autowired
     private ResourceMapper resourceMapper;
 
+    @Override
+    public List<Resource> getResourcesByUserId(Long userId) {
+        return resourceMapper.selectResourcesByUserId(userId);
+    }
+
+    @Override
+    public List<Resource> getResourcesByRoleId(Long roleId) {
+        return resourceMapper.selectResourcesByRoleId(roleId);
+    }
 }

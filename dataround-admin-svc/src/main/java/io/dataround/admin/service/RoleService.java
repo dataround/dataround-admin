@@ -9,12 +9,18 @@ package io.dataround.admin.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.dataround.admin.entity.Role;
 
+import java.util.List;
+
 /**
  * Role service
  * 
  * @author yuehan124@gmail.com
- * @since 2025/09/21
+ * @since 2026/09/21
  */
 public interface RoleService extends IService<Role> {
 
+    /**
+     * Get roles by user ID
+     */
+    List<Role> getRolesByUserId(Long userId);
 }

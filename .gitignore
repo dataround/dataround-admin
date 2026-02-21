@@ -1,15 +1,10 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+### build ###
+node_modules
+dist
+build
+target
 
-### IntelliJ IDEA ###
-.idea/
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
+### STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -18,18 +13,19 @@ target/
 .springBeans
 .sts4-cache
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
-.DS_Store
+### logs ###
+logs
+dataround-admin-web/yarn.lock
+dataround-admin-svc/src/main/resources/static
+
+### h2 database ###
+data/

@@ -6,9 +6,7 @@
 
 package io.dataround.admin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;   
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.dataround.admin.common.CookieUtils;   
 import io.dataround.admin.common.JwtUtil;
@@ -61,8 +59,8 @@ public class ProjectController extends BaseController {
 
     @GetMapping("/list")
     public Result<Page<ProjectVO>> list(Page<Project> params) {
-        params.addOrder(new OrderItem("id", true));
-        QueryWrapper<Project> queryWrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<Project> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Project::getId);
         Page<Project> page = projectService.page(params, queryWrapper);
         // fill createUser
         Set<Long> creatorIds = page.getRecords().stream().map(Project::getCreatorId).collect(Collectors.toSet());
@@ -90,7 +88,6 @@ public class ProjectController extends BaseController {
         UserInfo currentUser = getCurrentUser();
         Date now = new Date();
         if (project.getId() == null) {
-            project.setId(IdWorker.getId());
             project.setCreatorId(currentUser.getUserId());
             project.setCreateTime(now);
         }
@@ -107,12 +104,6 @@ public class ProjectController extends BaseController {
             }
         });
         List<ProjectUser> members = memberMap.values().stream().toList();
-        members.forEach(member -> {
-            member.setProjectId(project.getId());
-            if (member.getId() == null) {
-                member.setId(IdWorker.getId());
-            }
-        });
         boolean bool = projectService.saveOrUpdate(project, members);
         return Result.success(bool);
     }
@@ -121,7 +112,7 @@ public class ProjectController extends BaseController {
     public Result<Boolean> delete(@PathVariable Long id, HttpServletRequest request) {
         Assert.notNull(id, "project id should not be null");
         // check project used or not
-        UserInfo currentUser = getCurrentUser(request);
+        UserInfo currentUser = getCurrentUser();
         // only the project admin and no other project member, then can delete it
         List<ProjectUser> projectUsers = projectUserService.listByProjectIds(List.of(id));
         if (projectUsers.isEmpty() || projectUsers.size() == 1 && projectUsers.get(0).getIsAdmin() && projectUsers.get(0).getUserId().longValue() == currentUser.getUserId()) {
@@ -137,14 +128,14 @@ public class ProjectController extends BaseController {
 
     @GetMapping("/mine")
     public Result<List<Project>> myProject(HttpServletRequest request, HttpServletResponse response) {
-        UserInfo currentUser = getCurrentUser(request);
+        UserInfo currentUser = getCurrentUser();
         List<Project> projects = projectService.myProject(currentUser.getUserId());
         return Result.success(projects);
     }
 
     @PostMapping("/selected/{projectId}")
     public Result<Boolean> selectedChange(@PathVariable Long projectId, HttpServletRequest request, HttpServletResponse response) {
-        UserInfo currentUser = getCurrentUser(request);
+        UserInfo currentUser = getCurrentUser();
         log.info("update selected project to {} by {}", projectId, currentUser.getUserId());
         boolean result = projectService.updateSelected(currentUser.getUserId(), projectId);
         if (result) {

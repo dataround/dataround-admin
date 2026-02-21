@@ -11,7 +11,7 @@ import { doLogout } from '../../api/login';
 import { getMyProjects, updateSelected } from '../../api/user';
 import useRequest from '../../hooks/useRequest';
 import './index.less';
-import logoImage from '../../assets/logo.v20250728.png';
+import logoImage from '../../assets/logo.v20251009.png';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 

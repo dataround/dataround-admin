@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 2025/09/21
  */
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,10 +33,16 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     @Autowired
     private ProjectUserSerivce projectUserSerivce;
 
+    @Transactional
     @Override
     public boolean saveOrUpdate(Project project, List<ProjectUser> members) {
-        projectUserSerivce.saveOrUpdateBatch(members);
-        return super.saveOrUpdate(project);
+        boolean result = super.saveOrUpdate(project);
+        // Set project ID for each member
+        for (ProjectUser member : members) {
+            member.setProjectId(project.getId());
+        }
+        result = result && projectUserSerivce.saveOrUpdateBatch(members);
+        return result;
     }
 
     @Override

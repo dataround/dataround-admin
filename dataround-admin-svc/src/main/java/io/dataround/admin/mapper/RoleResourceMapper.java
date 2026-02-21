@@ -7,13 +7,13 @@
 package io.dataround.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.dataround.admin.entity.Role;
+import io.dataround.admin.entity.RoleResource;
 
 /**
- * Role mapper
+ * Role-Resource mapper
  * 
  * @author yuehan124@gmail.com
  * @since 2026/02/19
  */
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleResourceMapper extends BaseMapper<RoleResource> {
 }

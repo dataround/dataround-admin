@@ -9,32 +9,32 @@ package io.dataround.admin.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * Resource entity
+ * Resource entity (menus and APIs)
  * 
  * @author yuehan124@gmail.com
- * @since 2025/09/21
+ * @since 2025/02/19
  */
 @Data
 @TableName("public.resource")
 public class Resource {
 
     @TableId(type = IdType.AUTO)
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-    @JsonSerialize(using = ToStringSerializer.class)
+    // Parent resource ID, 0 for root
     private Long pid;
     private String name;
     private String enName;
-    private String path;
+    // Resource type: 'ui' for frontend menu/button, 'api' for backend API
+    private String type;
+    // Resource key: ui_key for frontend, api_path for backend
+    private String resKey;
+    // HTTP method for API resources (GET/POST/PUT/DELETE)
     private String method;
-    private String uiKey;
     private String description;
     private Date createTime;
 }
