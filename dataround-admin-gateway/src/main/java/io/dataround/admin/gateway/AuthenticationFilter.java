@@ -79,13 +79,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             }
             UserInfo userInfo = JwtUtil.verifyToken(cookie.getValue(), remoteIp);
             // login success and then continue
-            // uid header used to create account automatically by dolphinscheduler/sqlQuery
+            // uid/pid header used to by dataround-link
             // Modify the request headers before forwarding the request
             ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                     .header("uid", String.valueOf(userInfo.getUserId()))
-                    .header("un", userInfo.getUserName())
                     .header("pid", String.valueOf(userInfo.getProjectId()))
-                    .header("pn", userInfo.getProjectName())
                     .build();
             // Continue with the modified request
             return chain.filter(exchange.mutate().request(modifiedRequest).build());
@@ -99,11 +97,9 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         if (RequestUtils.isAjaxRequest(exchange.getRequest())) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         } else {
-            URI uri = exchange.getRequest().getURI();
-            String path = uri.getScheme() + "://" + config.getAdminDomain() + config.getLoginPath();
+            String loginUrl = RequestUtils.getLoginUrl(exchange.getRequest(), config.getLoginPath());
             exchange.getResponse().setStatusCode(HttpStatus.SEE_OTHER);
-            //set header
-            exchange.getResponse().getHeaders().add("location", path);
+            exchange.getResponse().getHeaders().add("location", loginUrl);
         }
         // IMPORTANT!!! setComplete()
         return exchange.getResponse().setComplete();

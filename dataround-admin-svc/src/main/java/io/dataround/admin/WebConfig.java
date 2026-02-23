@@ -7,6 +7,8 @@
 package io.dataround.admin;
 
 import lombok.Data;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -19,4 +21,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebConfig { 
 
+    @Value("${dataround.login.interceptor.escape}")
+    private String loginEscape;
 }

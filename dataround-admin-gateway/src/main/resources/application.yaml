@@ -12,31 +12,8 @@ spring:
       predicate:
         host:
           include-port: false #ignore http host's port
-      routes:
-        - id: admin_route
-          uri: http://127.0.0.1:5678
-          predicates:
-            - Host=admin.dataround.io
-            - Path=/mgmt/**
-        - id: dolphin_route
-          uri: http://dev.dataround.io
-          predicates:
-            - Host=admin.dataround.io
-            - Path=/dolphinscheduler/**
-
-        - id: ozone-om_route
-          uri: http://ozone-om.dataround.io
-          predicates:
-            - Host=ozone-om.dataround.io
-        - id: ozone-scm_route
-          uri: http://ozone-scm.dataround.io
-          predicates:
-            - Host=ozone-scm.dataround.io
-        - id: ozone-s3g_route
-          uri: http://ozone-s3g.dataround.io
-          predicates:
-            - Host=ozone-s3g.dataround.io
-
+      routes:    
+        # The gateway is matched in sequence.
         - id: grafana_route
           uri: http://grafana.dataround.io
           predicates:
@@ -66,12 +43,25 @@ spring:
           predicates:
             - Host=longhorn.dataround.io
 
+        - id: admin_route
+          uri: http://127.0.0.1:5680
+          predicates:
+            - Path=/dataadmin/**
+        - id: link_route
+          uri: http://127.0.0.1:5600
+          predicates:
+            - Path=/datalink/**
+        # Default route - fallback when no Host matches
+        - id: default_route
+          uri: http://127.0.0.1:5680
+          predicates:
+            - Path=/**
+
 
 dataround:
   admin:
-    domain: admin.dataround.io # browser input what domain name, admin_route also use dynamic domain name
-    loginPath: /admin/login
-    escapeUris: /admin/login, /admin/api/login, /admin/api/logout, /admin/api/captcha
+    loginPath: /dataadmin/login
+    escapeUris: /dataadmin/login, /dataadmin/api/login, /dataadmin/api/logout, /dataadmin/api/captcha
 
 # Logger Config
 logging:

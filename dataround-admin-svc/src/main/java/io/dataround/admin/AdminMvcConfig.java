@@ -9,7 +9,6 @@ package io.dataround.admin;
 import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -35,8 +34,8 @@ import io.swagger.v3.oas.models.info.License;
  */
 @Configuration
 public class AdminMvcConfig {
-    @Value("${dataround.login.interceptor.escape}")
-    private String loginEscape;
+    @Autowired
+    private WebConfig webConfig;
     @Autowired
     private AuthInterceptor authInterceptor;
     @Autowired
@@ -48,7 +47,7 @@ public class AdminMvcConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                String[] escapePatterns = loginEscape.split(",");
+                String[] escapePatterns = webConfig.getLoginEscape().split(",");
                 for (int i = 0; i < escapePatterns.length; i++) {
                     escapePatterns[i] = escapePatterns[i].trim();
                 }

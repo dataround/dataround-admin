@@ -20,9 +20,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GatewayConfig {
 
-    @Value("${dataround.admin.domain}")
-    private String adminDomain;
-
     @Value("${dataround.admin.loginPath}")
     private String loginPath;
 
